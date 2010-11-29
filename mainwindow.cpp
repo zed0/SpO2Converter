@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -126,6 +125,14 @@ ui->textBrowser->append("Duration of readings: " + durationHours + ":" + duratio
 			QTableWidgetItem *newItem = new QTableWidgetItem(current);
 			ui->tableWidget->setItem(row++, 2, newItem);
 		}
+
+		for(int i=0; i<spo2Percentage.size()-1; ++i)
+		{
+			graph.addLine(i, spo2Percentage.at(i).toInt(), i+1, spo2Percentage.at(i+1).toInt());
+		}
+
+		ui->graphicsView->setScene(&graph);
+		ui->graphicsView->show();
 		ui->statusBar->clearMessage();
 	}
 }

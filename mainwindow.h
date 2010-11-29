@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QGraphicsScene>
 
 namespace Ui {
 	class MainWindow;
@@ -20,6 +21,7 @@ public slots:
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+	QGraphicsScene graph;
 
 private:
 	Ui::MainWindow *ui;
