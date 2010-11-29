@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 
 namespace Ui {
     class MainWindow;
@@ -14,6 +15,7 @@ class MainWindow : public QMainWindow
 public slots:
 	void browseInput();
 	void browseOutput();
+	void convert();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -21,6 +23,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+	QString readUnicode(QFile &input, QDataStream &in, int offset, int chars);
 };
 
 #endif // MAINWINDOW_H
