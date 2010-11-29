@@ -5,12 +5,12 @@
 #include <QFileDialog>
 
 namespace Ui {
-    class MainWindow;
+	class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public slots:
 	void browseInput();
@@ -18,13 +18,14 @@ public slots:
 	void convert();
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+	Ui::MainWindow *ui;
 	QString readUnicode(QFile &input, QDataStream &in, int offset, int chars);
 	qint32 readInt(QFile &input, QDataStream &in, int offset);
+	qint8 readByte(QFile &input, QDataStream &in, int offset);
 };
 
 #endif // MAINWINDOW_H
