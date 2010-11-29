@@ -31,6 +31,7 @@ void MainWindow::convert()
 	ui->textBrowser->clear();
 	if(ui->inputTextbox->text() != "")
 	{
+		ui->statusBar->showMessage("Converting...");
 		QFile input(ui->inputTextbox->text());
 
 		input.open(QIODevice::ReadOnly);
@@ -58,13 +59,13 @@ void MainWindow::convert()
 		QString modelNumber = readUnicode(input, in, 0x0360, 32);
 		QString username = readUnicode(input, in, 0x03A0, 32);
 		QString manufacturer = readUnicode(input, in, 0x03E0, 32);
-		QString year = QString::number(readInt(input, in, 0x0420));
-		QString month = QString::number(readInt(input, in, 0x0424));
-		QString day = QString::number(readInt(input, in, 0x0428));
-		QString hour = QString::number(readInt(input, in, 0x042C));
-		QString minute = QString::number(readInt(input, in, 0x0430));
-		QString second = QString::number(readInt(input, in, 0x0434));
-		QString duration = QString::number(readInt(input, in, 0x0438));
+		qint32 year = readInt(input, in, 0x0420);
+		qint32 month = readInt(input, in, 0x0424);
+		qint32 day = readInt(input, in, 0x0428);
+		qint32 hour = readInt(input, in, 0x042C);
+		qint32 minute = readInt(input, in, 0x0430);
+		qint32 second = readInt(input, in, 0x0434);
+		qint32 duration = readInt(input, in, 0x0438);
 
 		QStringList spo2Percentage;
 
@@ -93,36 +94,54 @@ void MainWindow::convert()
 		ui->textBrowser->append("Model Number: " +modelNumber);
 		ui->textBrowser->append("Username: " + username);
 		ui->textBrowser->append("Manufacturer: " + manufacturer);
-		ui->textBrowser->append("Date: " + day + "/" + month + "/" + year);
-		ui->textBrowser->append("Time: " + hour + ":" + minute + ":" + second);
-		ui->textBrowser->append("Number of readings: " + duration);
+		ui->textBrowser->append("Date: " + QString::number(day) + "/" + QString::number(month) + "/" + QString::number(year));
+		ui->textBrowser->append("Time: " + QString::number(hour) + ":" + QString::number(minute) + ":" + QString::number(second));
+		ui->textBrowser->append("Number of readings: " + QString::number(duration));
 
-		ui->tableWidget->setRowCount(duration.toInt());
+		QString durationHours = QString::number(duration/360);
+		QString durationMinutes = QString::number((duration/60)%60);
+		QString durationSeconds = QString::number(duration%60);
+ui->textBrowser->append("Duration of readings: " + durationHours + ":" + durationMinutes.rightJustified(2,'0') + ":" + durationSeconds.rightJustified(2,'0'));
+
+		ui->tableWidget->setRowCount(duration);
 		QString current;
 		int row = 0;
+		while(row < duration)
+		{
+			QString sHour = QString::number((hour+(row/360))%24);
+			QString sMinute = QString::number((minute+(row/60))%60);
+			QString sSecond = QString::number((second+row)%60);
+			QTableWidgetItem *newItem = new QTableWidgetItem(sHour.rightJustified(2,'0') + ":" + sMinute.rightJustified(2,'0') + ":" + sSecond.rightJustified(2,'0'));
+			ui->tableWidget->setItem(row++, 0, newItem);
+		}
+		row = 0;
 		foreach(current, spo2Percentage)
 		{
 			QTableWidgetItem *newItem = new QTableWidgetItem(current);
-			ui->tableWidget->setItem(row++, 0, newItem);
+			ui->tableWidget->setItem(row++, 1, newItem);
 		}
 		row = 0;
 		foreach(current, pulseRate)
 		{
 			QTableWidgetItem *newItem = new QTableWidgetItem(current);
-			ui->tableWidget->setItem(row++, 1, newItem);
+			ui->tableWidget->setItem(row++, 2, newItem);
 		}
+		ui->statusBar->clearMessage();
 	}
 }
 
 QString MainWindow::readUnicode(QFile &input, QDataStream &in, int offset, int chars)
 {
-	QString result;
+	QString result = "";
 	qint16 currentByte;
 	input.seek(offset);
 	for(int i=0; i<chars; ++i)
 	{
 		in >> currentByte;
-		result.append(QChar(currentByte));
+		if(currentByte)
+		{
+			result.append(QChar(currentByte));
+		}
 	}
 	return result;
 }
