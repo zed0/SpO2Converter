@@ -24,6 +24,7 @@ public:
 private:
     Ui::MainWindow *ui;
 	QString readUnicode(QFile &input, QDataStream &in, int offset, int chars);
+	qint32 readInt(QFile &input, QDataStream &in, int offset);
 };
 
 #endif // MAINWINDOW_H
