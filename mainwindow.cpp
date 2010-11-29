@@ -97,11 +97,20 @@ void MainWindow::convert()
 		ui->textBrowser->append("Time: " + hour + ":" + minute + ":" + second);
 		ui->textBrowser->append("Number of readings: " + duration);
 
-		ui->textBrowser->append("SpO2 Percentages:");
-		ui->textBrowser->append(spo2Percentage.join(","));
-
-		ui->textBrowser->append("Pulse Rates:");
-		ui->textBrowser->append(pulseRate.join(","));
+		ui->tableWidget->setRowCount(duration.toInt());
+		QString current;
+		int row = 0;
+		foreach(current, spo2Percentage)
+		{
+			QTableWidgetItem *newItem = new QTableWidgetItem(current);
+			ui->tableWidget->setItem(row++, 0, newItem);
+		}
+		row = 0;
+		foreach(current, pulseRate)
+		{
+			QTableWidgetItem *newItem = new QTableWidgetItem(current);
+			ui->tableWidget->setItem(row++, 1, newItem);
+		}
 	}
 }
 
