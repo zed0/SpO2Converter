@@ -17,12 +17,14 @@ void MainWindow::browseInput()
 {
 	QString s = QFileDialog::getOpenFileName(this, "Input file", "./", "*.SpO2");
 	ui->inputTextbox->setText(s);
+	convert();
 }
 
 void MainWindow::browseOutput()
 {
 	QString s = QFileDialog::getSaveFileName(this, "Output file", "./", "*.csv");
 	ui->outputTextbox->setText(s);
+	save();
 }
 
 void MainWindow::convert()
