@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
+#include <QTextStream>
 
 namespace Ui {
 	class MainWindow;
@@ -18,6 +19,7 @@ public slots:
 	void browseInput();
 	void browseOutput();
 	void convert();
+	void save();
 
 public:
 	explicit MainWindow(QWidget *parent = 0);

@@ -74,7 +74,7 @@
     <item row="1" column="0">
      <widget class="QPushButton" name="convertButton">
       <property name="text">
-       <string>Convert!</string>
+       <string>Load</string>
       </property>
      </widget>
     </item>
@@ -178,10 +178,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>513</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>485</x>
+     <y>91</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>browseInput()</slot>
   <slot>browseOutput()</slot>
   <slot>convert()</slot>
+  <slot>save()</slot>
  </slots>
 </ui>

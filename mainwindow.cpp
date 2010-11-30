@@ -21,7 +21,7 @@ void MainWindow::browseInput()
 
 void MainWindow::browseOutput()
 {
-	QString s = QFileDialog::getOpenFileName(this, "Output file", "./");
+	QString s = QFileDialog::getSaveFileName(this, "Output file", "./", "*.csv");
 	ui->outputTextbox->setText(s);
 }
 
@@ -82,6 +82,7 @@ void MainWindow::convert()
 			pulseRate.append(QString::number(readByte(input, in, offset)));
 			offset += 2;
 		}
+		input.close();
 
 		ui->textBrowser->append("Name: " + name);
 		ui->textBrowser->append("Height:" + height + "cm");
@@ -102,7 +103,7 @@ void MainWindow::convert()
 		QString durationSeconds = QString::number(duration%60);
 ui->textBrowser->append("Duration of readings: " + durationHours + ":" + durationMinutes.rightJustified(2,'0') + ":" + durationSeconds.rightJustified(2,'0'));
 
-		ui->tableWidget->clear();
+		ui->tableWidget->clearContents();
 		ui->tableWidget->setRowCount(duration);
 		QString current;
 		int row = 0;
@@ -151,6 +152,25 @@ ui->textBrowser->append("Duration of readings: " + durationHours + ":" + duratio
 		ui->graphicsView->show();
 
 		ui->statusBar->clearMessage();
+	}
+}
+
+void MainWindow::save()
+{
+	if(ui->outputTextbox->text() != "")
+	{
+		QFile output(ui->outputTextbox->text());
+
+		output.open(QIODevice::WriteOnly | QIODevice::Text);
+		QTextStream out(&output);
+		out << "Reading,Time,SpO2%,Pulse Rate\n";
+		for(int i=0; i<ui->tableWidget->rowCount(); ++i)
+		{
+			out << i+1 << ",";
+			out << ui->tableWidget->item(i,0)->text() << ",";
+			out << ui->tableWidget->item(i,1)->text() << ",";
+			out << ui->tableWidget->item(i,2)->text() << "\n";
+		}
 	}
 }
 
