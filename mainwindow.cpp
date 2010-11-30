@@ -97,19 +97,21 @@ void MainWindow::convert()
 		ui->textBrowser->append("Time: " + QString::number(hour) + ":" + QString::number(minute) + ":" + QString::number(second));
 		ui->textBrowser->append("Number of readings: " + QString::number(duration));
 
-		QString durationHours = QString::number(duration/360);
+		QString durationHours = QString::number(duration/3600);
 		QString durationMinutes = QString::number((duration/60)%60);
 		QString durationSeconds = QString::number(duration%60);
 ui->textBrowser->append("Duration of readings: " + durationHours + ":" + durationMinutes.rightJustified(2,'0') + ":" + durationSeconds.rightJustified(2,'0'));
 
+		ui->tableWidget->clear();
 		ui->tableWidget->setRowCount(duration);
 		QString current;
 		int row = 0;
+		int initialSeconds = hour*3600 + minute*60 + second;
 		while(row < duration)
 		{
-			QString sHour = QString::number((hour+(row/360))%24);
-			QString sMinute = QString::number((minute+(row/60))%60);
-			QString sSecond = QString::number((second+row)%60);
+			QString sHour = QString::number(((initialSeconds+row)/3600)%24);
+			QString sMinute = QString::number(((initialSeconds+row)/60)%60);
+			QString sSecond = QString::number((initialSeconds+row)%60);
 			QTableWidgetItem *newItem = new QTableWidgetItem(sHour.rightJustified(2,'0') + ":" + sMinute.rightJustified(2,'0') + ":" + sSecond.rightJustified(2,'0'));
 			ui->tableWidget->setItem(row++, 0, newItem);
 		}
@@ -126,13 +128,28 @@ ui->textBrowser->append("Duration of readings: " + durationHours + ":" + duratio
 			ui->tableWidget->setItem(row++, 2, newItem);
 		}
 
+		graph.clear();
+
+		spText.setPlainText("SpO2%");
+		spText.setDefaultTextColor(QColor(Qt::red));
+		spText.setPos(-40, -spo2Percentage.at(0).toInt());
+		graph.addItem(&spText);
 		for(int i=0; i<spo2Percentage.size()-1; ++i)
 		{
-			graph.addLine(i, spo2Percentage.at(i).toInt(), i+1, spo2Percentage.at(i+1).toInt());
+			graph.addLine(i, -spo2Percentage.at(i).toInt(), i+1, -spo2Percentage.at(i+1).toInt(), QPen(QColor(Qt::red)));
 		}
 
+		plsText.setPlainText("Pulse Rate");
+		plsText.setDefaultTextColor(QColor(Qt::blue));
+		plsText.setPos(-60, -pulseRate.at(0).toInt());
+		graph.addItem(&plsText);
+		for(int i=0; i<pulseRate.size()-1; ++i)
+		{
+			graph.addLine(i, -pulseRate.at(i).toInt(), i+1, -pulseRate.at(i+1).toInt(), QPen(QColor(Qt::blue)));
+		}
 		ui->graphicsView->setScene(&graph);
 		ui->graphicsView->show();
+
 		ui->statusBar->clearMessage();
 	}
 }

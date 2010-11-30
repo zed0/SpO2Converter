@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
 
 namespace Ui {
 	class MainWindow;
@@ -22,6 +23,8 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 	QGraphicsScene graph;
+	QGraphicsTextItem spText;
+	QGraphicsTextItem plsText;
 
 private:
 	Ui::MainWindow *ui;

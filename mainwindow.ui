@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>643</width>
-    <height>487</height>
+    <width>795</width>
+    <height>652</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -120,8 +120,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>643</width>
-     <height>25</height>
+     <width>795</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -137,8 +137,8 @@
    <slot>browseInput()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>200</x>
-     <y>72</y>
+     <x>384</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>201</x>
@@ -153,8 +153,8 @@
    <slot>browseOutput()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>69</y>
+     <x>774</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>422</x>
